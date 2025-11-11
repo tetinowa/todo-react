@@ -68,29 +68,35 @@ export default function Home() {
             ))}
           </div>
           <div className="flex flex-col gap-4">
-            {todos.map((item) => (
-              <Card key={item.id}>
-                <CardContent className="flex gap-4 items-center">
-                  <Checkbox
-                    checked={item.isDone}
-                    onClick={() => {
-                      const newTodos = todos.map((todo) => {
-                        if (todo.id !== item.id) return todo;
-                        return {
-                          isDone: !item.isDone,
-                          text: item.text,
-                          id: item.id,
-                        };
-                      });
+            {todos
+              .filter((item) => {
+                if (selectedButton === "All") return true;
+                if (selectedButton === "Completed") return item.isDone === true;
+                return item.isDone === false;
+              })
+              .map((item) => (
+                <Card key={item.id}>
+                  <CardContent className="flex gap-4 items-center">
+                    <Checkbox
+                      checked={item.isDone}
+                      onClick={() => {
+                        const newTodos = todos.map((todo) => {
+                          if (todo.id !== item.id) return todo;
+                          return {
+                            isDone: !item.isDone,
+                            text: item.text,
+                            id: item.id,
+                          };
+                        });
 
-                      setTodos(newTodos);
-                    }}
-                  ></Checkbox>
-                  <p className="flex-1">{item.text}</p>
-                  <Button>Delete</Button>
-                </CardContent>
-              </Card>
-            ))}
+                        setTodos(newTodos);
+                      }}
+                    ></Checkbox>
+                    <p className="flex-1">{item.text}</p>
+                    <Button>Delete</Button>
+                  </CardContent>
+                </Card>
+              ))}
           </div>
         </CardContent>
         <CardFooter>
